@@ -9,6 +9,16 @@ export const LADDER = [20, 16, 12, 6, 3, 0];
 
 export const NICOTINE_PER_CIG = 1; // mg, EU/French maximum yield per cigarette
 
+// A cigarette is ~10–12 puffs; vape puffs carry less nicotine, so ~15 vape puffs stand in for one cigarette.
+export const PUFFS_PER_CIG = 15;
+export const WAKING_HOURS = 16;
+
+/** Daily and hourly puff budget that replaces `cigsPerDay` cigarettes. Held constant through the taper. */
+export function puffBudget(cigsPerDay) {
+  const perDay = Math.round((cigsPerDay * PUFFS_PER_CIG) / 10) * 10 || 10;
+  return { perDay, perHour: Math.max(1, Math.round(perDay / WAKING_HOURS)) };
+}
+
 export const PACES = {
   gentle: { label: 'Gentle', weeks: 4 },
   steady: { label: 'Steady', weeks: 3 },
@@ -61,9 +71,12 @@ export function buildPlan(input) {
     return step;
   });
   const totalDays = steps.length * days;
+  const puffs = puffBudget(o.cigsPerDay);
   return {
     input: o,
     nicotinePerDay: o.cigsPerDay * NICOTINE_PER_CIG,
+    puffsPerDay: puffs.perDay,
+    puffsPerHour: puffs.perHour,
     startStrength: S0,
     steps,
     totalDays,

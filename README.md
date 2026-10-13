@@ -14,6 +14,9 @@ Answer two questions: how many cigarettes a day, and how fast you want to go.
 2. **Every few weeks:** switch to the next weaker strength sold in shops: **20 → 16 → 12 → 6 → 3 → 0 mg/mL**.
 3. **0 mg:** keep the habit without nicotine until you're ready to stop.
 
+**Puffs:** about 15 vape puffs replace one cigarette, spread over 16 waking hours. A pack a day is about **300 puffs a day, 19 an hour**.
+The puff count stays the same at every step, so the nicotine drop comes from the weaker liquid. At 0 mg it becomes a ceiling to cut down from.
+
 | Cigarettes a day | Start with |
 |---|---|
 | under 10 | 6 mg |
@@ -32,7 +35,7 @@ It assumes French cigarettes (EU cap: 1 mg nicotine each) and e-liquid strengths
 ## Features
 
 - A dated step-by-step plan with one plain instruction per step
-- "Right now" card: your current strength and days until the next switch
+- "Right now" card: your current strength, puffs per day and per hour, and days until the next switch
 - Remembers your answers in the browser; **Copy link** shares an exact plan; print layout
 - Everything is calculated in the browser. `GET /api/plan?cigsPerDay=20&pace=steady&startDate=2026-10-13` returns the same plan as JSON
 

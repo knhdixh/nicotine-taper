@@ -65,8 +65,13 @@ function packsText(n) {
 
 function instruction(st, plan, i) {
   if (i === 0) return `<b>Stop cigarettes.</b> Vape ${st.strength} mg whenever you'd have smoked.`;
-  if (st.strength === 0) return `<b>Switch to 0 mg.</b> Same habit, no nicotine. Stop vaping whenever you're ready.`;
-  return `<b>Switch to ${st.strength} mg.</b> Vape as usual, no more than before.`;
+  if (st.strength === 0) return `<b>Switch to 0 mg.</b> Same habit, no nicotine. Cut down the puffs and stop whenever you're ready.`;
+  return `<b>Switch to ${st.strength} mg.</b> Same number of puffs as before, no more.`;
+}
+
+function puffs(st, plan) {
+  const cap = st.strength === 0 ? 'at most ' : 'about ';
+  return `<span class="puffs">${cap}<b>${plan.puffsPerDay}</b> puffs/day · <b>${plan.puffsPerHour}</b>/hour</span>`;
 }
 
 function when(st) {
@@ -79,7 +84,7 @@ function hero(plan, idx) {
     const start = plan.input.startDate ? ` on <b>${longDate(plan.input.startDate)}</b>` : '';
     return `<div class="hero"><span class="eyebrow">Your plan</span>
       <div class="hero-row"><div class="big">${plan.startStrength}<small>mg</small></div>
-      <p>Start${start} with <b>${plan.startStrength} mg</b> e-liquid instead of cigarettes.<br>
+      <p>Start${start} with <b>${plan.startStrength} mg</b> e-liquid instead of cigarettes, about <b>${plan.puffsPerDay} puffs a day</b> (${plan.puffsPerHour} an hour).<br>
       <span class="muted">Nicotine-free in ${plan.totalWeeks} weeks${plan.endDate ? `, by ${longDate(plan.endDate)}` : ''}.</span></p></div></div>`;
   }
   if (idx >= plan.steps.length) {
@@ -90,7 +95,7 @@ function hero(plan, idx) {
   const next = plan.steps[idx + 1];
   return `<div class="hero"><span class="eyebrow">Right now · step ${idx + 1} of ${plan.steps.length}</span>
     <div class="hero-row"><div class="big">${st.strength}<small>mg</small></div>
-    <p>${instruction(st, plan, idx)}<br><span class="muted">${next
+    <p>${instruction(st, plan, idx)}<br>${puffs(st, plan)}<br><span class="muted">${next
       ? `${plural(daysLeft, 'day')} until you switch to ${next.strength} mg.`
       : `${plural(daysLeft, 'day')} until you're done.`}</span></p></div></div>`;
 }
@@ -114,7 +119,7 @@ function render(plan) {
             <div class="when">${when(st)}${i === idx ? ' <span class="you">You are here</span>' : ''}</div>
             <div class="dose"><span class="mg">${st.strength}<small> mg</small></span>
               <span class="bar" aria-hidden="true"><i style="width:${Math.max(3, (st.strength / LADDER[0]) * 100)}%"></i></span></div>
-            <p class="what">${instruction(st, plan, i)}</p>
+            <p class="what">${instruction(st, plan, i)}<br>${puffs(st, plan)}</p>
           </li>`).join('')}
         <li class="finish${idx === plan.steps.length ? ' now' : ''}">
           <span class="dot" aria-hidden="true"></span>
@@ -123,7 +128,8 @@ function render(plan) {
         </li>
       </ol>
       <p class="muted small">Your ${plural(plan.input.cigsPerDay, 'French cigarette')} a day give about ${plan.nicotinePerDay} mg of nicotine.
-        ${plan.startStrength} mg e-liquid is the usual match for that, so you shouldn't feel a drop when you switch.</p>
+        ${plan.startStrength} mg e-liquid is the usual match for that, so you shouldn't feel a drop when you switch.
+        Puffs: about 15 vape puffs replace one cigarette, spread over 16 waking hours. Keep the count steady; the weaker liquid does the cutting.</p>
     </div>`;
   document.getElementById('share').onclick = share;
   document.getElementById('print').onclick = () => window.print();

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPlan, normalize, startStrength, currentStepIndex, LADDER, InputError } from '../public/taper.js';
+import { buildPlan, normalize, startStrength, puffBudget, currentStepIndex, LADDER, InputError } from '../public/taper.js';
 
 test('starting strength follows cigarettes per day', () => {
   assert.equal(startStrength(5), 6);
@@ -44,4 +44,13 @@ test('validation', () => {
   assert.throws(() => normalize({ pace: 'turbo' }), InputError);
   assert.throws(() => normalize({ startDate: 'tomorrow' }), InputError);
   assert.equal(normalize({ cigsPerDay: '12' }).cigsPerDay, 12);
+});
+
+test('puff budget replaces cigarettes and spreads over waking hours', () => {
+  assert.deepEqual(puffBudget(20), { perDay: 300, perHour: 19 });
+  assert.deepEqual(puffBudget(10), { perDay: 150, perHour: 9 });
+  assert.deepEqual(puffBudget(1), { perDay: 20, perHour: 1 });
+  const plan = buildPlan({ cigsPerDay: 20 });
+  assert.equal(plan.puffsPerDay, 300);
+  assert.equal(plan.puffsPerHour, 19);
 });

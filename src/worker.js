@@ -28,6 +28,11 @@ async function handleApi(request, env, url) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // Send *.workers.dev visitors to the custom domain so shared links and saved plans live on one host.
+    if (env.CANONICAL_HOST && url.hostname.endsWith('.workers.dev')) {
+      url.hostname = env.CANONICAL_HOST;
+      return Response.redirect(url.toString(), ['GET', 'HEAD'].includes(request.method) ? 301 : 308);
+    }
     try {
       // Reject cross-site state-changing requests.
       if (!['GET', 'HEAD'].includes(request.method)) {

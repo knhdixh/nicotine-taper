@@ -1,37 +1,46 @@
 # Nicotine Taper
 
-A week-by-week plan to quit smoking gradually: switch from cigarettes to vaping without a nicotine drop, then lower the e-liquid strength step by step until you're at 0 mg.
+Quit smoking one step at a time: swap cigarettes for a vape on day one, then buy a weaker e-liquid every few weeks until you're at 0 mg.
 
-**Live:** https://nicotine-taper.sieubadaokhanh04.workers.dev · auto-deploys from `main` via Workers Builds
+**Live:** https://ciggs.knhdixh.com · auto-deploys from `main` via Workers Builds
 
-![Nicotine Taper: plan for a 20-a-day smoker on a pod device](docs/screenshot.png)
+![Nicotine Taper: a plan for a pack-a-day smoker, three weeks in](docs/screenshot.png)
+
+## How it works
+
+Answer two questions: how many cigarettes a day, and how fast you want to go.
+
+1. **Day 1:** stop cigarettes and vape an e-liquid strong enough to match them, so there's no nicotine drop.
+2. **Every few weeks:** switch to the next weaker strength sold in shops: **20 → 16 → 12 → 6 → 3 → 0 mg/mL**.
+3. **0 mg:** keep the habit without nicotine until you're ready to stop.
+
+| Cigarettes a day | Start with |
+|---|---|
+| under 10 | 6 mg |
+| 10–19 | 12 mg |
+| 20–29 (about a pack) | 16 mg |
+| 30 or more | 20 mg (nicotine salt) |
+
+| Pace | Weeks per step | A pack a day takes |
+|---|---|---|
+| Gentle | 4 | 20 weeks |
+| Steady | 3 | 15 weeks |
+| Fast | 2 | 10 weeks |
+
+It assumes French cigarettes (EU cap: 1 mg nicotine each) and e-liquid strengths sold in France (20 mg/mL legal maximum).
 
 ## Features
 
-| | |
-|---|---|
-| **Personal plan** | From cigarettes per day, device type and pace, it estimates your daily nicotine and suggests a starting e-liquid strength |
-| **Switch phase** | Cigarettes fall week by week while vaping fills the gap, so total nicotine stays level during the switch |
-| **Step-down phase** | Strength drops by a fixed percentage per step (10–20%) while the amount you vape stays the same |
-| **Shop strengths & mix recipes** | Each step shows the nearest strength sold in shops and how to mix it from your starting liquid plus 0 mg liquid |
-| **Today view** | Set a start date to see which step you're on, with dates for every step |
-| **Chart** | Estimated nicotine per day, split into cigarettes and vaping |
-| **Private** | Calculated in the browser; settings stay in local storage. "Copy link" shares a plan by URL |
-| **Print** | Print-friendly layout to stick on the fridge |
-| **API** | `GET /api/plan?cigsPerDay=20&device=pod&pace=steady` returns the same plan as JSON |
+- A dated step-by-step plan with one plain instruction per step
+- "Right now" card: your current strength and days until the next switch
+- Remembers your answers in the browser; **Copy link** shares an exact plan; print layout
+- Everything is calculated in the browser. `GET /api/plan?cigsPerDay=20&pace=steady&startDate=2026-10-13` returns the same plan as JSON
 
-## How the numbers work
-
-- A cigarette delivers about **1 mg** of nicotine to the blood (adjustable, 0.3–3 mg).
-- Vaping absorption is estimated per device: pods with nicotine salt ≈ 50% of the nicotine in the liquid, refillable mouth-to-lung ≈ 40%, sub-ohm ≈ 30%.
-- The starting strength is the lowest usual strength for the device at which matching your smoking stays within a comfortable daily volume (3 mL for pods, 5 mL MTL, 15 mL sub-ohm), capped at the legal maximum (20 mg/mL in the EU and UK; adjustable). If you'd need more than that, the plan warns you and suggests a stronger device or patches.
-- Taper strength follows `S₀ × (1 − r)^k` until it drops below 1.5 mg/mL, then 0 mg for a couple of weeks.
-
-All maths lives in [`public/taper.js`](public/taper.js), shared by the page, the Worker and the tests.
+All the logic is in [`public/taper.js`](public/taper.js), shared by the page, the Worker and the tests.
 
 ## Limitations
 
-These are population estimates, **not medical advice**. Real nicotine absorption varies a lot with the device, coil, puffing style and the person. The page tells you how to adjust: signs of too much or too little nicotine, and when to stay on a step longer. Talk to a doctor or pharmacist if you're pregnant, have heart disease or take medication.
+This is a guide, **not medical advice**. People absorb nicotine differently, so the page explains how to adjust: stay on a step longer if cravings are strong, vape less if you feel sick. Talk to a doctor or pharmacist if you're pregnant, have heart disease or take medication.
 
 ## Stack
 
@@ -47,9 +56,11 @@ npm run dev        # http://localhost:8787
 
 ## Deploy your own
 
+Change or remove `routes` and `CANONICAL_HOST` in `wrangler.jsonc` (they point at `ciggs.knhdixh.com`), then:
+
 ```bash
 npx wrangler login
 npm run deploy
 ```
 
-No secrets, database or bindings are needed besides static assets.
+No secrets or database are needed.

@@ -22,7 +22,7 @@ test('cross-origin writes are rejected', async () => {
 });
 
 test('plan API returns a plan, and 400 for bad input', async () => {
-  const res = await call('/api/plan?cigsPerDay=10&device=mtl');
+  const res = await call('/api/plan?cigsPerDay=10&pace=fast');
   assert.equal(res.status, 200);
   const plan = await res.json();
   assert.equal(plan.input.cigsPerDay, 10);
@@ -30,4 +30,10 @@ test('plan API returns a plan, and 400 for bad input', async () => {
   const bad = await call('/api/plan?cigsPerDay=500');
   assert.equal(bad.status, 400);
   assert.match((await bad.json()).error, /Cigarettes per day/);
+});
+
+test('workers.dev redirects to the canonical host', async () => {
+  const res = await worker.fetch(new Request('https://x.y.workers.dev/?cigsPerDay=10'), { ...env, CANONICAL_HOST: 'ciggs.example.com' });
+  assert.equal(res.status, 301);
+  assert.equal(res.headers.get('Location'), 'https://ciggs.example.com/?cigsPerDay=10');
 });

@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nicotine-taper",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-13",
+  // Keep the *.workers.dev address; per-version preview URLs aren't needed.
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // API routes go to the Worker; everything else is served as static files.
+    "run_worker_first": ["/api/*"]
+  }
+}

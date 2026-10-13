@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nicotine Taper: switch from cigarettes to vaping, then step down</title>
+  <meta name="description" content="Build a gradual plan to move from cigarettes to vaping, then lower your e-liquid strength step by step to zero nicotine.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='19' width='6' height='10' rx='1.5' fill='%232a78d6'/%3E%3Crect x='13' y='12' width='6' height='17' rx='1.5' fill='%232a78d6' opacity='.7'/%3E%3Crect x='23' y='4' width='6' height='25' rx='1.5' fill='%232a78d6' opacity='.4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Nicotine Taper</div>
+    <span class="muted tagline">From cigarettes to vaping to zero, one step at a time</span>
+  </header>
+  <main>
+    <section class="intro">
+      <h1>Your step-down plan</h1>
+      <p class="muted">Tell us how you smoke. You get a week-by-week plan: switch to vaping without a nicotine drop, then lower the
+        liquid strength a little each step until you're at 0 mg. Everything is calculated in your browser and nothing is sent anywhere.</p>
+    </section>
+
+    <div class="layout">
+      <form id="form" class="panel inputs" autocomplete="off">
+        <h2>About you</h2>
+        <label class="field">
+          <span>Cigarettes per day</span>
+          <div class="range-row">
+            <input type="range" name="cigsRange" min="1" max="60" step="1" aria-label="Cigarettes per day slider">
+            <input type="number" name="cigsPerDay" min="1" max="80" step="1" inputmode="numeric" required>
+          </div>
+        </label>
+
+        <fieldset class="field">
+          <legend>What will you vape with?</legend>
+          <div class="choices" id="devices"></div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>Pace</legend>
+          <div class="segmented" id="paces"></div>
+        </fieldset>
+
+        <label class="field">
+          <span>Start date <small class="muted">(optional, shows where you are today)</small></span>
+          <input type="date" name="startDate">
+        </label>
+
+        <details class="advanced">
+          <summary>Fine-tune</summary>
+          <div class="grid2">
+            <label class="field"><span>Nicotine absorbed per cigarette (mg)</span>
+              <input type="number" name="mgPerCig" min="0.3" max="3" step="0.1"></label>
+            <label class="field"><span>Legal max strength (mg/mL)</span>
+              <input type="number" name="maxStrength" min="3" max="60" step="1"></label>
+            <label class="field"><span>Starting strength (mg/mL)</span>
+              <input type="number" name="startStrength" min="1" max="60" step="0.5" placeholder="Auto"></label>
+            <label class="field"><span>Weeks to switch over</span>
+              <input type="number" name="switchWeeks" min="0" max="8" step="1"></label>
+            <label class="field"><span>Cut per step (%)</span>
+              <input type="number" name="reductionPct" min="5" max="50" step="1" placeholder="From pace"></label>
+            <label class="field"><span>Days per step</span>
+              <input type="number" name="stepDays" min="3" max="28" step="1" placeholder="From pace"></label>
+            <label class="field"><span>Weeks at 0 mg before stopping</span>
+              <input type="number" name="zeroWeeks" min="0" max="12" step="1"></label>
+          </div>
+          <p class="muted small">A cigarette delivers about 1 mg of nicotine to your blood (0.5–2 mg depending on brand and how you smoke).
+            The EU and UK cap e-liquid at 20 mg/mL.</p>
+        </details>
+
+        <div class="actions">
+          <button type="button" class="btn" id="share">Copy link to plan</button>
+          <button type="button" class="btn" id="print">Print</button>
+          <button type="button" class="btn ghost" id="reset">Reset</button>
+        </div>
+      </form>
+
+      <section id="result" class="result"></section>
+    </div>
+
+    <section class="panel guide">
+      <h2>Using the plan</h2>
+      <div class="cards3">
+        <div>
+          <h3>Too much nicotine?</h3>
+          <p>Nausea, dizziness, headache or a racing heart mean you're getting more than you need. Vape less, or move to the next step early.</p>
+        </div>
+        <div>
+          <h3>Too little?</h3>
+          <p>Strong cravings, irritability or reaching for a cigarette mean the step was too big. Stay on the current step longer. Don't go back up unless you'd otherwise smoke.</p>
+        </div>
+        <div>
+          <h3>A slip isn't a fail</h3>
+          <p>Smoked a cigarette? Carry on with the plan. A slip doesn't undo weeks of progress; going back to daily smoking would.</p>
+        </div>
+      </div>
+      <h3>Getting the strengths</h3>
+      <p>Each step shows the nearest strength sold in shops, and a mix recipe: blend your starting liquid with a 0 mg version of the
+        same flavour in the ratio shown. Use a small measuring syringe and label the bottles. If you can't mix, use the shop strength
+        and move on when the plan reaches the next one.</p>
+      <h3>Be safe</h3>
+      <ul>
+        <li>This is a guide, not medical advice. If you're pregnant, have heart disease or take medication, talk to a doctor or pharmacist first.
+          Nicotine replacement (patches, gum) and prescription medicines also help people stop; you can combine them with this plan.</li>
+        <li>Vaping is far less harmful than smoking but not harmless. The aim is to stop smoking first, then stop nicotine.</li>
+        <li>E-liquid is poisonous if swallowed. Keep it away from children and pets, and buy from regulated sellers.</li>
+        <li>The figures are estimates. How much nicotine you absorb depends on your device, coil and puffing style, so use how you feel to adjust.</li>
+      </ul>
+    </section>
+  </main>
+  <footer class="footer muted small">Nicotine Taper · not medical advice · <a href="https://github.com/knhdixh/nicotine-taper">source</a></footer>
+  <div id="tip" class="tip" hidden></div>
+  <div id="toast" class="toast" hidden></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

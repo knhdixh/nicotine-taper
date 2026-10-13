@@ -2,7 +2,7 @@
 
 A week-by-week plan to quit smoking gradually: switch from cigarettes to vaping without a nicotine drop, then lower the e-liquid strength step by step until you're at 0 mg.
 
-**Live:** https://nicotine-taper.sieubadaokhanh04.workers.dev
+**Live:** https://nicotine-taper.sieubadaokhanh04.workers.dev · auto-deploys from `main` via Workers Builds
 
 ![Nicotine Taper: plan for a 20-a-day smoker on a pod device](docs/screenshot.png)
 
